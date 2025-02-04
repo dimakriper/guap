@@ -108,6 +108,7 @@
         )
   )
 )
+)
 
 ;; Test get-priority
 (format t "~%Testing get-priority:~%")
