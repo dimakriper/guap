@@ -16,38 +16,29 @@
   )
 )
 
-(defun find-lowest-priority-op (expr &optional pos min-pos min-priority)
-  ;; Base case: empty expression returns minimum position found
+(defun find-lowest-priority-op (expr &optional 
+                                   (pos 0)
+                                   (min-pos -1)
+                                   (min-priority most-positive-fixnum))
   (cond 
     ((null expr) min-pos)
-    ;; Recursive case: check current element
-    (t (let* (
-              ;; Get first element of expression
-              (current (car expr))
-              ;; Calculate priority of current element
+    (t (let* ((current (car expr))
               (priority (if (is-operator current)
                           (get-priority current)
-                          most-positive-fixnum)
-              )
-         )
-         ;; If current priority is lower or equal, update minimum
-         (if (<= priority min-priority)
+                          most-positive-fixnum)))
+         (if (and priority 
+                 (or (= min-priority most-positive-fixnum)
+                     (<= priority min-priority)))
              (find-lowest-priority-op 
-                (cdr expr)      ; Rest of expression
-                (1+ pos)        ; Increment position
-                pos            ; New minimum position
-                priority       ; New minimum priority
-             )
-             ;; Otherwise keep searching with same minimum
+                (cdr expr)
+                (1+ pos)
+                pos
+                priority)
              (find-lowest-priority-op 
-                (cdr expr)      ; Rest of expression
-                (1+ pos)        ; Increment position
-                min-pos        ; Keep same minimum position
-                min-priority   ; Keep same minimum priority
-             )
-         )
-      )
-    )
+                (cdr expr)
+                (1+ pos)
+                min-pos
+                min-priority))))
   )
 )
 
